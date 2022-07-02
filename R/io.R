@@ -111,7 +111,7 @@ ingnomina2hmbk<-function(inputfile,outputfile,ingmapcat) {
   dt<-readxl::read_xls(path = inputfile,sheet = 1,skip = 5,col_names = T)
 #  dt<-readxl::read_xls(path = inputfile,sheet = 1,skip = 4,col_names = T) (old)
   dt<-dt[!is.na(dt[,1]),]
-  dt<-tidyr::unite(dt,sep = ":",col = "newcat",categoria,SUBcategoria,remove = T)
+  dt<-tidyr::unite(dt,sep = ":",col = "newcat",2:3,remove = T)
 #  dt<-dt[,c(1,4,4,4,3,5,2)] (old)
   dt<-dt[,c(1,4,4,4,3,6,2)]
   names(dt)<-c("date","payment","info","payee","memo","amount","ingcats")  
