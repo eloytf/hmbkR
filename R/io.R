@@ -4,7 +4,7 @@
 #' @return nothing
 #' @export
 abanca2hmbk<-function (inputfile,outputfile) {
-  nd<-readr::read_delim(inputfile,delim = ";",na = character(),locale = locale(decimal_mark = ","))
+  nd<-readr::read_delim(inputfile,delim = ";",na = character(),locale = readr::locale(decimal_mark = ","))
   nd$Concepto<-paste(nd$Concepto,nd$`Concepto ampliado`)
   nd<-nd[,c(1,8,3,8,3,4,8)]
   names(nd)<-c("date","payment","info","payee","memo","amount","category")  
@@ -56,7 +56,7 @@ bankintercredit2hmbk<-function(inputfile,outputfile) {
 #' @return nothing
 #' @export
 self2hmbk<-function(inputfile,outputfile) {
-  dat<-readr::read_delim(inputfile,delim = ";",locale=locale(encoding = "ASCII"))
+  dat<-readr::read_delim(inputfile,delim = ";",locale=readr::locale(encoding = "ASCII"))
   dat<-dat[,c(1,4,4,4,3,5,4)]
   names(dat)<-c("date","payment","info","payee","memo","amount","category")  
   dat$payment<-0
@@ -119,7 +119,7 @@ ingnomina2hmbk<-function(inputfile,outputfile,ingmapcat) {
   dt$payee<-""
   
   
-#  ingmapcat<-readr::read_delim("Z:/non-work/economy/housebank/ingmapcats.csv",";",locale = locale(encoding="ISO-8859-1" ),na = character())
+#  ingmapcat<-readr::read_delim("Z:/non-work/economy/housebank/ingmapcats.csv",";",locale = readr::locale(encoding="ISO-8859-1" ),na = character())
   ingmapcat<-tidyr::unite(ingmapcat,sep = ":",col = "category",category,subcategory,remove = T)
   dt<-dplyr::left_join(x = dt,y = ingmapcat)
   
