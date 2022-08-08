@@ -172,3 +172,25 @@ multilog2hmbk<-function(inputfile,outputfile) {
   dt$amount<-(-1)*as.numeric(dt$amount)
   readr::write_delim(dt,outputfile,delim = ";")
 }
+
+#' Convert bbva to homebank
+#' Convert bbva to homebank
+#' @param inputfile 
+#' @param outputfile 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+bbva2hmbk<-function(inputfile,outputfile) {
+  dt<-readxl::read_excel(inputfile,skip=4,col_names = T)
+  dt<-dt[,c(1,3,4,5,7,9)]
+  dt<-tidyr::unite(dt,"memo",c(2,3,6))
+  names(dt)<-c("date","memo","amount","info")
+  dt$payment<-0
+  dt$payee<-""
+  dt$category<-""
+  dt<-dt[,c(1,5,4,6,2,3,7)]
+  dt$tags<-""
+  readr::write_delim(dt,outputfile,delim = ";") 
+}
