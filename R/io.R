@@ -194,3 +194,24 @@ bbva2hmbk<-function(inputfile,outputfile) {
   dt$tags<-""
   readr::write_delim(dt,outputfile,delim = ";") 
 }
+
+#' Convert santander to homebank
+#' Convert santander to homebank
+#' @param inputfile 
+#' @param outputfile 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+santander2hmbk<-function(inputfile,outputfile) {
+dt<-readxl::read_excel(inputfile,skip=7,col_names = T)
+dt<-dt[,c(1,3,4,5)]
+names(dt)<-c("date","memo","amount","info")
+dt$payment<-0
+dt$payee<-""
+dt$category<-""
+dt<-dt[,c(1,5,4,6,2,3,7)]
+dt$tags<-""
+readr::write_delim(dt,outputfile,delim = ";")
+}
