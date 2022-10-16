@@ -215,3 +215,50 @@ dt<-dt[,c(1,5,4,6,2,3,7)]
 dt$tags<-""
 readr::write_delim(dt,outputfile,delim = ";")
 }
+#' Convert abanca credit to homebank
+#' Convert abanca credit to homebank
+#' @param inputfile Path to the input file
+#' @return nothing
+#' @export
+abancacredit2hmbk<-function(inputfile,outputfile) {
+  dt<-readr::read_delim(inputfile,delim = "\t",col_names = F,skip = 1,col_types = "c?cccc",guess_max = 3)
+  dt<-dt[!grepl("Anulado",as.data.frame(dt)[,4],perl = T),]
+  dt<-dt[!grepl("DEBITO",as.data.frame(dt)[,3],perl = T),]
+  dt<-dt[,c(2,3,5,6)]
+  dt<-dt[!is.na(dt[,3]),]
+  dt[,4]<-gsub(" EUR","",as.data.frame(dt)[,4],perl = T)
+  dt[,4]<-gsub(",",".",as.data.frame(dt)[,4],perl = T)
+  dt<-dt[!grepl("IMPORTE",as.data.frame(dt)[,4],perl = T),]
+  dt<-dt[,c(1,1,1,1,3,4,1)]
+  names(dt)<-c("date","payment","info","payee","memo","amount","category")  
+  dt$payment<-0
+  dt$payee<-""
+  dt$category<-""
+  # se puede mejorar mapeando categoria
+  dt$tags<-""
+  dt$info<-""
+  dt$amount<-(as.numeric(dt$amount))
+  readr::write_delim(dt,outputfile,delim = ";") 
+}
+
+#' Convert bbva credit to homebank
+#' Convert bbva credit to homebank
+#' @param inputfile 
+#' @param outputfile 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+bbvacredit2hmbk<-function(inputfile,outputfile) {
+  dt<-readxl::read_excel(inputfile,skip=4,col_names = T)
+  dt<-dt[,c(1,3,4,2)]
+#  dt<-tidyr::unite(dt,"memo",c(2,3,6))
+  names(dt)<-c("date","memo","amount","info")
+  dt$payment<-0
+  dt$payee<-""
+  dt$category<-""
+  dt<-dt[,c(1,5,4,6,2,3,7)]
+  dt$tags<-""
+  readr::write_delim(dt,outputfile,delim = ";") 
+}
