@@ -140,6 +140,7 @@ evocredit2hmbk<-function(inputfile,outputfile) {
   dt<-dt[,c(2,3,4)]
   dt<-dt[!is.na(dt[,3]),]
   dt[,3]<-gsub(" EUR","",dt$X4,perl = T)
+  dt[,3]<-gsub("\\.","",dt$X4,perl = T)
   dt[,3]<-gsub(",",".",dt$X4,perl = T)
   dt<-dt[,c(1,1,1,1,2,3,1)]
   names(dt)<-c("date","payment","info","payee","memo","amount","category")  
