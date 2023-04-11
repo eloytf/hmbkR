@@ -263,3 +263,25 @@ bbvacredit2hmbk<-function(inputfile,outputfile) {
   dt$tags<-""
   readr::write_delim(dt,outputfile,delim = ";") 
 }
+
+#' Convert db to homebank
+#' Convert db to homebank
+#' @param inputfile 
+#' @param outputfile 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+db2hmbk<-function(inputfile,outputfile) {
+  dt<-readxl::read_excel(inputfile,skip=7,col_names = T, col_types = c("guess","guess","guess","guess","guess","guess","guess","guess","guess"))
+  dt<-dt[,c(1,3,8,9)]
+  names(dt)<-c("date","memo","amount","info")
+  dt$payment<-0
+  dt$payee<-""
+  dt$category<-""
+  dt<-dt[,c(1,5,4,6,2,3,7)]
+  dt<-dt[,c(1,5,4,6,2,3,7)]
+  dt$tags<-""
+  readr::write_delim(dt,outputfile,delim = ";") 
+}
