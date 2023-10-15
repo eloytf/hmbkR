@@ -12,6 +12,9 @@ bbva2hmbk(inputfile, outputfile)
 
 \item{outputfile}{}
 }
+\value{
+nothing
+}
 \description{
 Convert bbva to homebank
 Convert bbva to homebank

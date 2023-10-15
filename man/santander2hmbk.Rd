@@ -12,6 +12,9 @@ santander2hmbk(inputfile, outputfile)
 
 \item{outputfile}{}
 }
+\value{
+nothing
+}
 \description{
 Convert santander to homebank
 Convert santander to homebank

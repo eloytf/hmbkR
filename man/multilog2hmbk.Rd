@@ -5,7 +5,7 @@
 \title{Convert multilog to homebank
 Convert multilog to homebank}
 \usage{
-multilog2hmbk(inputfile, outputfile)
+multilog2hmbk(inputfile, outputfile, delim = ";")
 }
 \arguments{
 \item{inputfile}{Path to the input file}

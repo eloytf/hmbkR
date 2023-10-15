@@ -158,8 +158,8 @@ evocredit2hmbk<-function(inputfile,outputfile) {
 #' @param inputfile Path to the input file
 #' @return nothing
 #' @export
-multilog2hmbk<-function(inputfile,outputfile) {
-  dt<-readr::read_delim(inputfile,delim = ";",skip = 5)
+multilog2hmbk<-function(inputfile,outputfile,delim=";") {
+  dt<-readr::read_delim(inputfile,delim = delim,skip = 5)
   dt<-dt[c(-1,-2),]
   
   dt<-dt[,c(2,1,5,1,3,4,1)]
@@ -179,10 +179,10 @@ multilog2hmbk<-function(inputfile,outputfile) {
 #' @param inputfile 
 #' @param outputfile 
 #'
-#' @return
+#' @return nothing
 #' @export
 #'
-#' @examples
+
 bbva2hmbk<-function(inputfile,outputfile) {
   dt<-readxl::read_excel(inputfile,skip=4,col_names = T)
   dt<-dt[,c(1,3,4,5,7,9)]
@@ -201,10 +201,10 @@ bbva2hmbk<-function(inputfile,outputfile) {
 #' @param inputfile 
 #' @param outputfile 
 #'
-#' @return
+#' @return nothing
 #' @export
 #'
-#' @examples
+
 santander2hmbk<-function(inputfile,outputfile) {
 dt<-readxl::read_excel(inputfile,skip=7,col_names = T)
 dt<-dt[,c(1,3,4,5)]
@@ -247,10 +247,10 @@ abancacredit2hmbk<-function(inputfile,outputfile) {
 #' @param inputfile 
 #' @param outputfile 
 #'
-#' @return
+#' @return nothing
 #' @export
 #'
-#' @examples
+
 bbvacredit2hmbk<-function(inputfile,outputfile) {
   dt<-readxl::read_excel(inputfile,skip=4,col_names = T)
   dt<-dt[,c(1,3,4,2)]
@@ -269,10 +269,10 @@ bbvacredit2hmbk<-function(inputfile,outputfile) {
 #' @param inputfile 
 #' @param outputfile 
 #'
-#' @return
+#' @return nothing
 #' @export
 #'
-#' @examples
+
 db2hmbk<-function(inputfile,outputfile) {
   dt<-readxl::read_excel(inputfile,skip=7,col_names = T, col_types = c("guess","guess","guess","guess","guess","guess","guess","guess","guess"))
   dt<-dt[,c(1,3,8,9)]
@@ -285,3 +285,45 @@ db2hmbk<-function(inputfile,outputfile) {
   dt$tags<-""
   readr::write_delim(dt,outputfile,delim = ";") 
 }
+
+#' Convert myinvestor to homebank
+#' Convert myinvestor to homebank
+#' @param inputfile 
+#' @param outputfile 
+#'
+#' @return nothing
+#' @export
+#'
+
+myinvestor2hmbk<-function(inputfile,outputfile) {
+  dt<-readxl::read_excel(inputfile,skip=9,col_names = T, col_types = c("guess","guess","guess","guess","guess","text"))
+  dt<-dt[,c(1,3,5,6)]
+  names(dt)<-c("date","memo","amount","info")
+  dt$date<-as.Date(dt$date,"%d/%m/%Y",tz="NZ")
+  dt$payment<-0
+  dt$payee<-""
+  dt$category<-""
+  dt<-dt[,c(1,5,4,6,2,3,7)]
+  dt$tags<-""
+  readr::write_delim(dt,outputfile,delim = ";")
+}
+
+#' Convert n26 to homebank
+#' 
+#' @param inputfile 
+#' @param outputfile 
+#'
+#' @return nothing
+#' @export
+#'
+
+n26tohmbk<-function(inputfile,outputfile) {
+  dt<-readr::read_delim(inputfile,delim = ",")
+  names(dt)<-c("date","payee","acc_number","memo","info","amount","amount_foreign","type_foreign","erate")
+  dt$payment<-0
+  dt$category<-""
+  dt<-dt[,c(1,10,5,2,4,6,11)]
+  dt$tags<-""
+  readr::write_delim(dt,outputfile,delim = ";")
+}
+
