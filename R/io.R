@@ -281,7 +281,7 @@ db2hmbk<-function(inputfile,outputfile) {
   dt$payee<-""
   dt$category<-""
   dt<-dt[,c(1,5,4,6,2,3,7)]
-  dt<-dt[,c(1,5,4,6,2,3,7)]
+#  dt<-dt[,c(1,5,4,6,2,3,7)]
   dt$tags<-""
   readr::write_delim(dt,outputfile,delim = ";") 
 }
