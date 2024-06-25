@@ -3,16 +3,28 @@
 #' @param inputfile Path to the input file
 #' @return nothing
 #' @export
+# abanca2hmbk<-function (inputfile,outputfile) {
+#   nd<-readr::read_delim(inputfile,delim = ";",na = character(),locale = readr::locale(decimal_mark = ","))
+#   nd$Concepto<-paste(nd$Concepto,nd$`Concepto ampliado`)
+#   nd<-nd[,c(1,8,3,8,3,4,8)]
+#   names(nd)<-c("date","payment","info","payee","memo","amount","category")  
+#   nd$payment<-0
+#   nd$payee<-"abanca_corriente"
+#   nd$category<-""
+#   nd$tags<-""
+#   nd$info<-""
+#   readr::write_delim(nd,outputfile,delim = ";")
+# }
 abanca2hmbk<-function (inputfile,outputfile) {
-  nd<-readr::read_delim(inputfile,delim = ";",na = character(),locale = readr::locale(decimal_mark = ","))
-  nd$Concepto<-paste(nd$Concepto,nd$`Concepto ampliado`)
-  nd<-nd[,c(1,8,3,8,3,4,8)]
+  nd<-readr::read_delim(inputfile,delim = ";",na = character(),skip = 4,locale = readr::locale(decimal_mark = ","))
+#  nd$Concepto<-paste(nd$Concepto,nd$`Concepto ampliado`)
+  nd<-nd[,c(1,8,8,8,5,7,8)]
   names(nd)<-c("date","payment","info","payee","memo","amount","category")  
   nd$payment<-0
   nd$payee<-"abanca_corriente"
   nd$category<-""
   nd$tags<-""
-  nd$info<-""
+#  nd$info<-""
   readr::write_delim(nd,outputfile,delim = ";")
 }
 #' Convert bankinter to homebank
@@ -56,7 +68,7 @@ bankintercredit2hmbk<-function(inputfile,outputfile) {
 #' @return nothing
 #' @export
 self2hmbk<-function(inputfile,outputfile) {
-  dat<-readr::read_delim(inputfile,delim = ";",locale=readr::locale(encoding = "ASCII"))
+  dat<-readr::read_delim(inputfile,delim = ";",locale=readr::locale(encoding = "ISO-8859-2"))
   dat<-dat[,c(1,4,4,4,3,5,4)]
   names(dat)<-c("date","payment","info","payee","memo","amount","category")  
   dat$payment<-0
