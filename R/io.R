@@ -1,6 +1,8 @@
+#ingSys.setlocale(category = "LC_ALL", locale = "gl_ES.utf8")
 #' Convert abanca to homebank
 #' Convert abanca to homebank
 #' @param inputfile Path to the input file
+#' @param outputfile Path to the output file
 #' @return nothing
 #' @export
 # abanca2hmbk<-function (inputfile,outputfile) {
@@ -30,6 +32,7 @@ abanca2hmbk<-function (inputfile,outputfile) {
 #' Convert bankinter to homebank
 #' Convert bankinter to homebank
 #' @param inputfile Path to the input file
+#' @param outputfile Path to the output file
 #' @return nothing
 #' @export
 bankinter2hmbk<-function (inputfile,outputfile) {
@@ -47,6 +50,7 @@ bankinter2hmbk<-function (inputfile,outputfile) {
 #' Convert bankinter credit to homebank
 #' Convert bankinter credit to homebank
 #' @param inputfile Path to the input file
+#' @param outputfile Path to the output file
 #' @return nothing
 #' @export
 bankintercredit2hmbk<-function(inputfile,outputfile) {
@@ -65,6 +69,7 @@ bankintercredit2hmbk<-function(inputfile,outputfile) {
 #' Convert selfbank to homebank
 #' Convert selfbank to homebank
 #' @param inputfile Path to the input file
+#' @param outputfile Path to the output file
 #' @return nothing
 #' @export
 self2hmbk<-function(inputfile,outputfile) {
@@ -82,6 +87,7 @@ self2hmbk<-function(inputfile,outputfile) {
 #' Convert evobanco to homebank
 #' Convert evobanco to homebank
 #' @param inputfile Path to the input file
+#' @param outputfile Path to the output file
 #' @return nothing
 #' @export
 evo2hmbk<-function(inputfile,outputfile) {
@@ -99,6 +105,7 @@ evo2hmbk<-function(inputfile,outputfile) {
 #' Convert ing cuenta naranja to homebank
 #' Convert ing cuenta naranja to homebank
 #' @param inputfile Path to the input file
+#' @param outputfile Path to the output file
 #' @return nothing
 #' @export
 ingnaranja2hmbk<-function(inputfile,outputfile) {
@@ -113,9 +120,10 @@ ingnaranja2hmbk<-function(inputfile,outputfile) {
   #dt$info<-""
   readr::write_delim(dt,outputfile,delim = ";") 
 }
-#' Convert ing cuenta nómina to 
-#' Convert ing cuenta nómina to homebank
+#' Convert ing cuenta nomina to 
+#' Convert ing cuenta nomina to homebank
 #' @param inputfile Path to the input file
+#' @param outputfile Path to the output file
 #' @param ingmapcat path to mapping categories table
 #' @return nothing
 #' @export
@@ -142,9 +150,40 @@ ingnomina2hmbk<-function(inputfile,outputfile,ingmapcat) {
   #return(dt)
   readr::write_delim(dt,outputfile,delim = ";") 
 }
+#' Convert ing xls from searches to homebank 
+#' Convert ing xls from searches to homebank 
+#' @param inputfile Path to the input file
+#' @param outputfile Path to the output file
+#' @param ingmapcat path to mapping categories table
+#' @return nothing
+#' @export
+ingbusqueda2hmbk<-function(inputfile,outputfile,ingmapcat) {
+  dt<-readxl::read_xls(path = inputfile,sheet = 1,skip = 4,col_names = T)
+  #  dt<-readxl::read_xls(path = inputfile,sheet = 1,skip = 4,col_names = T) (old)
+  dt<-dt[!is.na(dt[,1]),]
+  dt<-tidyr::unite(dt,sep = ":",col = "newcat",2:3,remove = T)
+  #  dt<-dt[,c(1,4,4,4,3,5,2)] (old)
+  dt<-dt[,c(1,4,4,4,3,5,2)]
+  names(dt)<-c("date","payment","info","payee","memo","amount","ingcats")  
+  dt$payment<-0
+  dt$payee<-""
+  
+  
+  #  ingmapcat<-readr::read_delim("Z:/non-work/economy/housebank/ingmapcats.csv",";",locale = readr::locale(encoding="ISO-8859-1" ),na = character())
+  ingmapcat<-tidyr::unite(ingmapcat,sep = ":",col = "category",category,subcategory,remove = T)
+  dt<-dplyr::left_join(x = dt,y = ingmapcat)
+  
+  dt$tags<-""
+  dt$info<-dt$ingcats
+  dt<-dt[,c(1,2,3,4,5,6,8,9)]
+  dt[is.na(dt$category),7]<-""
+  #return(dt)
+  readr::write_delim(dt,outputfile,delim = ";") 
+}
 #' Convert evobanco credit to homebank
 #' Convert evobanco credit to homebank
 #' @param inputfile Path to the input file
+#' @param outputfile Path to the output file
 #' @return nothing
 #' @export
 evocredit2hmbk<-function(inputfile,outputfile) {
@@ -168,6 +207,8 @@ evocredit2hmbk<-function(inputfile,outputfile) {
 #' Convert multilog to homebank
 #' Convert multilog to homebank
 #' @param inputfile Path to the input file
+#' @param outputfile Path to the output file
+#' @param delim delimiter for readr::read_delim, depending on what the user chooses at multilog
 #' @return nothing
 #' @export
 multilog2hmbk<-function(inputfile,outputfile,delim=";") {
@@ -231,6 +272,7 @@ readr::write_delim(dt,outputfile,delim = ";")
 #' Convert abanca credit to homebank
 #' Convert abanca credit to homebank
 #' @param inputfile Path to the input file
+#' @param outputfile Path to the output file
 #' @return nothing
 #' @export
 abancacredit2hmbk<-function(inputfile,outputfile) {
@@ -298,8 +340,8 @@ db2hmbk<-function(inputfile,outputfile) {
   readr::write_delim(dt,outputfile,delim = ";") 
 }
 
-#' Convert myinvestor to homebank
-#' Convert myinvestor to homebank
+#' Convert myinvestor xlsx to homebank
+#' Convert myinvestor xlsx to homebank
 #' @param inputfile 
 #' @param outputfile 
 #'
@@ -307,11 +349,38 @@ db2hmbk<-function(inputfile,outputfile) {
 #' @export
 #'
 
-myinvestor2hmbk<-function(inputfile,outputfile) {
+myinvestorxlsx2hmbk<-function(inputfile,outputfile) {
   dt<-readxl::read_excel(inputfile,skip=9,col_names = T, col_types = c("guess","guess","guess","guess","guess","text"))
   dt<-dt[,c(1,3,5,6)]
   names(dt)<-c("date","memo","amount","info")
   dt$date<-as.Date(dt$date,"%d/%m/%Y",tz="NZ")
+  dt$payment<-0
+  dt$payee<-""
+  dt$category<-""
+  dt<-dt[,c(1,5,4,6,2,3,7)]
+  dt$tags<-""
+  readr::write_delim(dt,outputfile,delim = ";")
+}
+
+#' Convert myinvestor csv to homebank
+#' Convert myinvestor csv to homebank
+#' @param inputfile 
+#' @param outputfile 
+#'
+#' @return nothing
+#' @export
+#'
+
+myinvestorcsv2hmbk<-function(inputfile,outputfile) {
+  dt<-readr::read_delim
+  dt<-readr::read_delim(inputfile,delim = ";",col_types = "ccccc")
+  dt<-dt[,c(1,3,4)]
+  names(dt)<-c("date","memo","amount")
+  dt$date<-as.Date(dt$date,"%d/%m/%Y",tz="NZ")
+  dt[,3]<-gsub("\\.","",as.data.frame(dt)[,3])
+  dt[,3]<-gsub(",",".",as.data.frame(dt)[,3])
+  dt[,3]<-as.double(as.data.frame(dt)[,3])
+  dt$info<-""
   dt$payment<-0
   dt$payee<-""
   dt$category<-""
@@ -331,11 +400,54 @@ myinvestor2hmbk<-function(inputfile,outputfile) {
 
 n26tohmbk<-function(inputfile,outputfile) {
   dt<-readr::read_delim(inputfile,delim = ",")
-  names(dt)<-c("date","payee","acc_number","memo","info","amount","amount_foreign","type_foreign","erate")
+  names(dt)<-c("date","date2","payee","acc_number","memo","","info","amount","amount_foreign","type_foreign","erate")
   dt$payment<-0
   dt$category<-""
-  dt<-dt[,c(1,10,5,2,4,6,11)]
+  dt<-dt[,c(1,12,5,3,5,8,13)]
   dt$tags<-""
   readr::write_delim(dt,outputfile,delim = ";")
 }
 
+#' Convert wizink to homebank
+#' 
+#' @param inputfile 
+#' @param outputfile 
+#'
+#' @return nothing
+#' @export
+#'
+wizink2hmbk<-function (inputfile,outputfile) {
+data<-readxl::read_excel(inputfile,sheet = 1)
+data<-data[,c(1,2,2,4,2,3,2)]
+names(data)<-c("date","payment","info","payee","memo","amount","category")  
+data$payment<-0
+data$payee<-""
+data$category<-""
+data$tags<-""
+data$info<-""
+readr::write_delim(data,outputfile,delim = ";")
+}
+
+#'
+#'
+#'
+#'#' Convert wizink credit to homebank
+#' 
+#' @param inputfile 
+#' @param outputfile 
+#'
+#' @return nothing
+#' @export
+#'
+
+wizinkcredit2hmbk<-function (inputfile,outputfile) {
+  data<-readxl::read_excel(inputfile,sheet = 1)
+  data<-data[,c(1,3,3,4,3,5,3)]
+  names(data)<-c("date","payment","info","payee","memo","amount","category")  
+  data$payment<-0
+  data$payee<-""
+  data$category<-""
+  data$tags<-""
+  data$info<-""
+  readr::write_delim(data,outputfile,delim = ";")
+}

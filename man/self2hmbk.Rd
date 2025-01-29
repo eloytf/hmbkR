@@ -9,6 +9,8 @@ self2hmbk(inputfile, outputfile)
 }
 \arguments{
 \item{inputfile}{Path to the input file}
+
+\item{outputfile}{Path to the output file}
 }
 \value{
 nothing

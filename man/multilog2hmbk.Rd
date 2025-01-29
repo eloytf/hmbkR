@@ -9,6 +9,10 @@ multilog2hmbk(inputfile, outputfile, delim = ";")
 }
 \arguments{
 \item{inputfile}{Path to the input file}
+
+\item{outputfile}{Path to the output file}
+
+\item{delim}{delimiter for readr::read_delim, depending on what the user chooses at multilog}
 }
 \value{
 nothing
