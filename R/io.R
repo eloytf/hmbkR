@@ -400,10 +400,14 @@ myinvestorcsv2hmbk<-function(inputfile,outputfile) {
 
 n26tohmbk<-function(inputfile,outputfile) {
   dt<-readr::read_delim(inputfile,delim = ",")
-  names(dt)<-c("date","date2","payee","acc_number","memo","","info","amount","amount_foreign","type_foreign","erate")
+  names(dt)<-c("date","date2","payee","acc_number","memo","payment_ref","info","amount","amount_foreign","type_foreign","erate")
   dt$payment<-0
   dt$category<-""
-  dt<-dt[,c(1,12,5,3,5,8,13)]
+  dt$number<-""
+  dt[is.na(dt$payee),3]<-"bizum"
+  dt[is.na(dt$payment_ref),6]<-""
+  dt$memo<-paste0(dt$memo,"_",dt$payee,"_",dt$payment_ref)
+  dt<-dt[,c(1,12,4,3,5,8,13)]
   dt$tags<-""
   readr::write_delim(dt,outputfile,delim = ";")
 }
