@@ -453,5 +453,54 @@ wizinkcredit2hmbk<-function (inputfile,outputfile) {
   data$category<-""
   data$tags<-""
   data$info<-""
+  data$amount<-data$amount*(-1)
+  readr::write_delim(data,outputfile,delim = ";")
+}
+
+#'
+#'
+#'
+#'#' Convert openbank to homebank
+#' 
+#' @param inputfile 
+#' @param outputfile 
+#'
+#' @return nothing
+#' @export
+#'
+
+ob2hmbk<-function (inputfile,outputfile) {
+  data<-readxl::read_excel(inputfile,sheet = 1,skip = 10,)
+  data<-data[,c(1,9,9,9,5,7,9)]
+  names(data)<-c("date","payment","info","payee","memo","amount","category")  
+  data$payment<-0
+  data$payee<-""
+  data$category<-""
+  data$tags<-""
+  data$info<-""
+  readr::write_delim(data,outputfile,delim = ";")
+}
+
+#'
+#'
+#'
+#'#' Convert banca march to homebank
+#' 
+#' @param inputfile 
+#' @param outputfile 
+#'
+#' @return nothing
+#' @export
+#'
+
+bmarch2hmbk<-function (inputfile,outputfile) {
+  data<-readxl::read_excel(inputfile,sheet = 1,skip = 7,)
+  data<-data[,c(1,3,7,7,4,6,3)]
+  names(data)<-c("date","payment","info","payee","memo","amount","category")  
+  data$payment<-0
+  data$payee<-""
+  data$category<-""
+  data$tags<-""
+  #data$info<-""
   readr::write_delim(data,outputfile,delim = ";")
 }
