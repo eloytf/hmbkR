@@ -3,6 +3,7 @@
 export(abanca2hmbk)
 export(abancacredit2hmbk)
 export(bankinter2hmbk)
+export(bankinterbusqueda2hmbk)
 export(bankintercredit2hmbk)
 export(bbva2hmbk)
 export(bbvacredit2hmbk)

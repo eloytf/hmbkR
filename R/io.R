@@ -47,6 +47,25 @@ bankinter2hmbk<-function (inputfile,outputfile) {
   readr::write_delim(data,outputfile,delim = ";")
   
 }
+
+#' Convert bankinter busqueda to homebank
+#' Convert bankinter, new format (2025-09) to homebank
+#' @param inputfile Path to the input file
+#' @param outputfile Path to the output file
+#' @return nothing
+#' @export
+bankinterbusqueda2hmbk<-function (inputfile,outputfile) {
+  data<-readxl::read_excel(inputfile,sheet = 1,skip = 8)
+  data<-data[,c(1,5,5,5,3,4,5)]
+  names(data)<-c("date","payment","info","payee","memo","amount","category")  
+  data$payment<-0
+  data$payee<-""
+  data$category<-""
+  data$tags<-""
+  data$info<-""
+  readr::write_delim(data,outputfile,delim = ";")
+  
+}
 #' Convert bankinter credit to homebank
 #' Convert bankinter credit to homebank
 #' @param inputfile Path to the input file
