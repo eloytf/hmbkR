@@ -29,6 +29,27 @@ abanca2hmbk<-function (inputfile,outputfile) {
 #  nd$info<-""
   readr::write_delim(nd,outputfile,delim = ";")
 }
+#' Convert b100 to homebank
+#' Convert b100 to homebank
+#' @param inputfile Path to the input file
+#' @param outputfile Path to the output file
+#' @return nothing
+#' @export
+bcen2hmbk<-function (inputfile,outputfile) {
+  data<-readr::read_delim(inputfile)
+  data<-data[,c(1,3,6,8,4,5,8)]
+  names(data)<-c("date","payment","info","payee","memo","amount","category")  
+  data<-tidyr::unite(data,"payment",payment:memo,remove = FALSE)
+  data$memo<-data$payment
+  data$payment<-0
+  data$payee<-""
+  data$category<-""
+  data$tags<-""
+  data<-data[grep("save|SAVE|HUCHA",data$memo,perl = T,invert = T),]
+#  data$info<-""
+  readr::write_delim(data,outputfile,delim = ";")
+  
+}
 #' Convert bankinter to homebank
 #' Convert bankinter to homebank
 #' @param inputfile Path to the input file
