@@ -462,7 +462,7 @@ n26tohmbk<-function(inputfile,outputfile) {
 #'
 wizink2hmbk<-function (inputfile,outputfile) {
 data<-readxl::read_excel(inputfile,sheet = 1)
-data<-data[,c(1,2,2,4,2,3,2)]
+data<-data[,c(1,2,2,3,2,3,2)]
 names(data)<-c("date","payment","info","payee","memo","amount","category")  
 data$payment<-0
 data$payee<-""
